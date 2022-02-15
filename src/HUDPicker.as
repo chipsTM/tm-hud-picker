@@ -66,10 +66,17 @@ void RenderMenu() {
 bool halt = false;
 void Main() {
 #if TMNEXT
-    CTrackMania@ app = cast<CTrackMania>(GetApp());
-    CTrackManiaNetwork@ network = cast<CTrackManiaNetwork>(app.Network);
+    auto app = cast<CTrackMania>(GetApp());
+    auto loadMgr = app.LoadProgress;
+    auto network = cast<CTrackManiaNetwork>(app.Network);
+
     while(true && !halt) {
-        if (network.ClientManiaAppPlayground !is null && network.ClientManiaAppPlayground.Playground !is null && network.ClientManiaAppPlayground.Playground.Map !is null) {
+        // wait until playground finishes loading
+        while (loadMgr.State == NGameLoadProgress_SMgr::EState::Displayed) {
+            yield();
+        }
+        
+        if (network.ClientManiaAppPlayground !is null && network.ClientManiaAppPlayground.Playground !is null && network.ClientManiaAppPlayground.UILayers.Length > 0) {
             auto uilayers = network.ClientManiaAppPlayground.UILayers;
 
             for (uint i = 0; i < raceElements.Length; i++) {

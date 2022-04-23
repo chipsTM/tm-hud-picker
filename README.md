@@ -14,6 +14,9 @@ Additional UI elements can be added (contact me on the Openplanet discord)
 
 ## Changelog
 
+### v2.1
+- add null check in order to prevent game from crashing
+
 ### v2.0
 - major refactor to set elements as classes and remove repetitive code
 - added ability to toggle sub-views (requested by Inspeired and IamPd)

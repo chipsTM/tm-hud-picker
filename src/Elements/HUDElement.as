@@ -34,20 +34,20 @@ class HUDElement {
                         
                         // We recursively get the sub controls of the frame to individually hide/show.
                         CGameManialinkFrame@ c = cast<CGameManialinkFrame@>(curLayer.LocalPage.GetFirstChild(this.SubModuleName));
-                        array<CGameManialinkFrame@> frames = { c };
-                        while (!frames.IsEmpty()) {
-                            MwFastBuffer<CGameManialinkControl@> children = frames[0].Controls;
-                            for (uint j = 0; j < children.Length; j++) {
-                                if (Reflection::TypeOf(children[j]).Name == "CGameManialinkFrame") {
-                                    frames.InsertLast(cast<CGameManialinkFrame@>(children[j]));
-                                } else {
-                                    this.SubModules.InsertLast(cast<CGameManialinkControl@>(children[j]));
+                        if (c !is null) {
+                            array<CGameManialinkFrame@> frames = { c };
+                            while (!frames.IsEmpty()) {
+                                MwFastBuffer<CGameManialinkControl@> children = frames[0].Controls;
+                                for (uint j = 0; j < children.Length; j++) {
+                                    if (Reflection::TypeOf(children[j]).Name == "CGameManialinkFrame") {
+                                        frames.InsertLast(cast<CGameManialinkFrame@>(children[j]));
+                                    } else {
+                                        this.SubModules.InsertLast(cast<CGameManialinkControl@>(children[j]));
+                                    }
                                 }
+                                frames.RemoveAt(0);
                             }
-                            frames.RemoveAt(0);
                         }
-                        // print(this.Name);
-                        // print(this.SubModules.Length);
                     }
                     this.Checked = true;
                     break; // we don't need to continue further

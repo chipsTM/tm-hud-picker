@@ -62,6 +62,44 @@ void RenderMenu() {
 #endif
 }
 
+void OnDestroyed() {
+    // reset all handles to elements when we switch maps/leave current map
+    for (uint i = 0; i < raceElements.Length; i++) {
+        raceElements[i].Checked = false;
+        @raceElements[i].Module = null;
+        raceElements[i].SubModules.RemoveRange(0, raceElements[i].SubModules.Length);
+    }
+    for (uint i = 0; i < timeattackElements.Length; i++) {
+        timeattackElements[i].Checked = false;
+        @timeattackElements[i].Module = null;
+        timeattackElements[i].SubModules.RemoveRange(0, timeattackElements[i].SubModules.Length);
+    }
+    for (uint i = 0; i < knockoutElements.Length; i++) {
+        knockoutElements[i].Checked = false;
+        @knockoutElements[i].Module = null;
+        knockoutElements[i].SubModules.RemoveRange(0, knockoutElements[i].SubModules.Length);
+    }
+}
+
+void OnDisabled() {
+    // reset all handles to elements when we switch maps/leave current map
+    for (uint i = 0; i < raceElements.Length; i++) {
+        raceElements[i].Checked = false;
+        @raceElements[i].Module = null;
+        raceElements[i].SubModules.RemoveRange(0, raceElements[i].SubModules.Length);
+    }
+    for (uint i = 0; i < timeattackElements.Length; i++) {
+        timeattackElements[i].Checked = false;
+        @timeattackElements[i].Module = null;
+        timeattackElements[i].SubModules.RemoveRange(0, timeattackElements[i].SubModules.Length);
+    }
+    for (uint i = 0; i < knockoutElements.Length; i++) {
+        knockoutElements[i].Checked = false;
+        @knockoutElements[i].Module = null;
+        knockoutElements[i].SubModules.RemoveRange(0, knockoutElements[i].SubModules.Length);
+    }
+}
+
 
 bool halt = false;
 void Main() {
@@ -103,25 +141,19 @@ void Main() {
         } else {
             // reset all handles to elements when we switch maps/leave current map
             for (uint i = 0; i < raceElements.Length; i++) {
-                if (raceElements[i].Checked) {
-                    raceElements[i].Checked = false;
-                    @raceElements[i].Module = null;
-                    raceElements[i].SubModules.RemoveRange(0, raceElements[i].SubModules.Length);
-                }
+                raceElements[i].Checked = false;
+                @raceElements[i].Module = null;
+                raceElements[i].SubModules.RemoveRange(0, raceElements[i].SubModules.Length);
             }
             for (uint i = 0; i < timeattackElements.Length; i++) {
-                if (timeattackElements[i].Checked) {
-                    timeattackElements[i].Checked = false;
-                    @timeattackElements[i].Module = null;
-                    timeattackElements[i].SubModules.RemoveRange(0, timeattackElements[i].SubModules.Length);
-                }
+                timeattackElements[i].Checked = false;
+                @timeattackElements[i].Module = null;
+                timeattackElements[i].SubModules.RemoveRange(0, timeattackElements[i].SubModules.Length);
             }
             for (uint i = 0; i < knockoutElements.Length; i++) {
-                if (knockoutElements[i].Checked) {
-                    knockoutElements[i].Checked = false;
-                    @knockoutElements[i].Module = null;
-                    knockoutElements[i].SubModules.RemoveRange(0, knockoutElements[i].SubModules.Length);
-                }
+                knockoutElements[i].Checked = false;
+                @knockoutElements[i].Module = null;
+                knockoutElements[i].SubModules.RemoveRange(0, knockoutElements[i].SubModules.Length);
             }
         }
         sleep(100);

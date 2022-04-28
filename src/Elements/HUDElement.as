@@ -3,7 +3,7 @@ class HUDElement {
     string ModuleName;
     CGameUILayer@ Module;
     string SubModuleName;
-    array<CGameManialinkControl@> SubModules;
+    array<CControlBase@> SubModules;
     bool Checked;
     bool GetVisible() { return true; }
     void SetVisible(bool v) { }
@@ -19,7 +19,7 @@ class HUDElement {
         return (this.GetVisible() ? "\\$7F7" : "\\$FFF") + this.Name + "\\$z";
     }
 
-    void FindElements(MwFastBuffer<CGameUILayer@> uilayers) {
+    void FindElements(MwFastBuffer<CGameUILayer@> &in uilayers) {
         for (uint i = 0; i < uilayers.Length; i++) {
             CGameUILayer@ curLayer = uilayers[i];
             int start = curLayer.ManialinkPageUtf8.IndexOf("<");
@@ -30,23 +30,26 @@ class HUDElement {
                     @this.Module = @curLayer;
 
                     if (this.SubModuleName != "") {
+                        this.SubModules.RemoveRange(0, this.SubModules.Length);
                         // NOTE: we need to show/hide individual controls instead of the parent frame container. Otherwise causes flickering.
                         
                         // We recursively get the sub controls of the frame to individually hide/show.
-                        CGameManialinkFrame@ c = cast<CGameManialinkFrame@>(curLayer.LocalPage.GetFirstChild(this.SubModuleName));
+                        CControlFrame@ c = cast<CControlFrame@>(curLayer.LocalPage.GetFirstChild(this.SubModuleName).Control);
                         if (c !is null) {
-                            array<CGameManialinkFrame@> frames = { c };
+                            array<CControlFrame@> frames  = { c };
                             while (!frames.IsEmpty()) {
-                                MwFastBuffer<CGameManialinkControl@> children = frames[0].Controls;
+                                auto children = frames[0].Childs;
                                 for (uint j = 0; j < children.Length; j++) {
-                                    if (Reflection::TypeOf(children[j]).Name == "CGameManialinkFrame") {
-                                        frames.InsertLast(cast<CGameManialinkFrame@>(children[j]));
+                                    if (Reflection::TypeOf(children[j]).Name == "CControlFrame") {
+                                        frames.InsertLast(cast<CControlFrame@>(children[j]));
                                     } else {
-                                        this.SubModules.InsertLast(cast<CGameManialinkControl@>(children[j]));
+                                        this.SubModules.InsertLast(cast<CControlBase@>(children[j]));
                                     }
                                 }
                                 frames.RemoveAt(0);
                             }
+                        } else {
+                            error("SubModule could not be found");
                         }
                     }
                     this.Checked = true;
@@ -64,9 +67,9 @@ class HUDElement {
             }
         } else if (this.Module !is null && !this.SubModules.IsEmpty()) {
             for (uint i = 0; i < this.SubModules.Length; i++) {
-                if (this.GetVisible() && this.SubModules[i] !is null && !this.SubModules[i].Visible) {
+                if (this.GetVisible() && this.SubModules[i] !is null && !this.SubModules[i].IsVisible) {
                     this.SubModules[i].Show();
-                } else if (!this.GetVisible() && this.SubModules[i] !is null  && this.SubModules[i].Visible) {
+                } else if (!this.GetVisible() && this.SubModules[i] !is null && this.SubModules[i].IsVisible) {
                     this.SubModules[i].Hide();
                 }
             }

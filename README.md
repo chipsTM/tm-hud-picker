@@ -14,6 +14,9 @@ Additional UI elements can be added (contact me on the Openplanet discord)
 
 ## Changelog
 
+### v2.2.1
+- fix UI stack unwind, only shows dropdown menu during race
+
 ### v2.2
 - some additional refactor to only store index instead of Nod object. (Hopefully no more crashes)
 

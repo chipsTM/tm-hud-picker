@@ -1,7 +1,7 @@
 void HUDPickerUI() {
     UI::Text("\\$9CFRace\\$z");
     for (uint i = 0; i < raceElements.Length; i++) {
-        if(UI::MenuItem(raceElements[i].MenuText(), "", raceElements[i].GetVisible(), (raceElements[i].SubModuleName != "" && !raceElements[i].IsParentVisible(uilayers[raceElements[i].ModuleIndex])) ? false : true )) {
+        if(UI::MenuItem(raceElements[i].MenuText(), "", raceElements[i].GetVisible(), (raceElements[i].SubModuleName != "" && !raceElements[i].IsParentVisible(gameInfo.UILayers[raceElements[i].ModuleIndex])) ? false : true )) {
             raceElements[i].SetVisible(!raceElements[i].GetVisible());
         }
     }
@@ -9,7 +9,7 @@ void HUDPickerUI() {
     UI::Separator();
     UI::Text("\\$9CFTime Attack\\$z");
     for (uint i = 0; i < timeattackElements.Length; i++) {
-        if(UI::MenuItem(timeattackElements[i].MenuText(), "", timeattackElements[i].GetVisible(), (timeattackElements[i].SubModuleName != "" && !timeattackElements[i].IsParentVisible(uilayers[timeattackElements[i].ModuleIndex])) ? false : true )) {
+        if(UI::MenuItem(timeattackElements[i].MenuText(), "", timeattackElements[i].GetVisible(), (timeattackElements[i].SubModuleName != "" && !timeattackElements[i].IsParentVisible(gameInfo.UILayers[timeattackElements[i].ModuleIndex])) ? false : true )) {
             timeattackElements[i].SetVisible(!timeattackElements[i].GetVisible());
         }
     }
@@ -17,7 +17,7 @@ void HUDPickerUI() {
     UI::Separator();
     UI::Text("\\$9CFKnockout\\$z");
     for (uint i = 0; i < knockoutElements.Length; i++) {
-        if(UI::MenuItem(knockoutElements[i].MenuText(), "", knockoutElements[i].GetVisible(), (knockoutElements[i].SubModuleName != "" && !knockoutElements[i].IsParentVisible(uilayers[knockoutElements[i].ModuleIndex])) ? false : true )) {
+        if(UI::MenuItem(knockoutElements[i].MenuText(), "", knockoutElements[i].GetVisible(), (knockoutElements[i].SubModuleName != "" && !knockoutElements[i].IsParentVisible(gameInfo.UILayers[knockoutElements[i].ModuleIndex])) ? false : true )) {
             knockoutElements[i].SetVisible(!knockoutElements[i].GetVisible());
         }
     }
@@ -27,61 +27,55 @@ void HUDPickerUI() {
 
 void RenderMenuMain() {
 #if TMNEXT
-    if (showMenu && UI::BeginMenu(Icons::Eye + " HUD Picker")) {
-        HUDPickerUI();
+    if (gameInfo.IsPlaying()) {
+        if (showMenu && UI::BeginMenu(Icons::Eye + " HUD Picker")) {
+            HUDPickerUI();
+        }
     }
 #endif
 }
 
 void RenderMenu() {
 #if TMNEXT
-    if (!showMenu && UI::BeginMenu(Icons::Eye + " HUD Picker")) {
-        HUDPickerUI();
+    if (gameInfo.IsPlaying()) {
+        if (!showMenu && UI::BeginMenu(Icons::Eye + " HUD Picker")) {
+            HUDPickerUI();
+        }
     }
 #endif
 }
 
-MwFastBuffer<CGameUILayer@> uilayers;
+GameInfo@ gameInfo;
 
 void Main() {
 #if TMNEXT
-    auto app = cast<CTrackMania>(GetApp());
-    auto loadMgr = app.LoadProgress;
-    auto network = cast<CTrackManiaNetwork>(app.Network);
+    @gameInfo = GameInfo();
 
     while(true) {
         // wait until playground finishes loading
-        while (loadMgr.State == NGameLoadProgress_SMgr::EState::Displayed) {
+        while (gameInfo.LoadProgress.State == NGameLoadProgress_SMgr::EState::Displayed) {
             yield();
         }
-        auto playground = app.CurrentPlayground;
-        if (playground !is null) {
-            if (network.ClientManiaAppPlayground !is null && network.ClientManiaAppPlayground.Playground !is null && network.ClientManiaAppPlayground.UILayers.Length > 0 && playground.GameTerminals.Length > 0) {
-                uilayers = network.ClientManiaAppPlayground.UILayers;
-                
-                auto uiseq = playground.GameTerminals[0].UISequence_Current;
-                if (uiseq == SGamePlaygroundUIConfig::EUISequence::Playing) {
-                    for (uint i = 0; i < raceElements.Length; i++) {
-                        if (raceElements[i].ModuleIndex != -1 && raceElements[i].ModuleIndex < int(uilayers.Length)) {
-                            raceElements[i].UpdateVisibilty(uilayers[raceElements[i].ModuleIndex]);
-                        } else {
-                            raceElements[i].FindElements(uilayers);
-                        }
-                    }
-                    for (uint i = 0; i < timeattackElements.Length; i++) {
-                        if (timeattackElements[i].ModuleIndex != -1 && timeattackElements[i].ModuleIndex < int(uilayers.Length)) {
-                            timeattackElements[i].UpdateVisibilty(uilayers[timeattackElements[i].ModuleIndex]);
-                        } else {
-                            timeattackElements[i].FindElements(uilayers);
-                        }
-                    }
-                    for (uint i = 0; i < knockoutElements.Length; i++) {
-                        if (knockoutElements[i].ModuleIndex != -1 && knockoutElements[i].ModuleIndex < int(uilayers.Length)) {
-                            knockoutElements[i].UpdateVisibilty(uilayers[knockoutElements[i].ModuleIndex]);
-                        } else {
-                            knockoutElements[i].FindElements(uilayers);
-                        }
-                    }
+        if (gameInfo.IsPlaying()) {
+            for (uint i = 0; i < raceElements.Length; i++) {
+                if (raceElements[i].ModuleIndex != -1 && raceElements[i].ModuleIndex < int(gameInfo.UILayers.Length)) {
+                    raceElements[i].UpdateVisibilty(gameInfo.UILayers[raceElements[i].ModuleIndex]);
+                } else {
+                    raceElements[i].FindElements(gameInfo.UILayers);
+                }
+            }
+            for (uint i = 0; i < timeattackElements.Length; i++) {
+                if (timeattackElements[i].ModuleIndex != -1 && timeattackElements[i].ModuleIndex < int(gameInfo.UILayers.Length)) {
+                    timeattackElements[i].UpdateVisibilty(gameInfo.UILayers[timeattackElements[i].ModuleIndex]);
+                } else {
+                    timeattackElements[i].FindElements(gameInfo.UILayers);
+                }
+            }
+            for (uint i = 0; i < knockoutElements.Length; i++) {
+                if (knockoutElements[i].ModuleIndex != -1 && knockoutElements[i].ModuleIndex < int(gameInfo.UILayers.Length)) {
+                    knockoutElements[i].UpdateVisibilty(gameInfo.UILayers[knockoutElements[i].ModuleIndex]);
+                } else {
+                    knockoutElements[i].FindElements(gameInfo.UILayers);
                 }
             }
         }

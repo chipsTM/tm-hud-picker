@@ -1,7 +1,7 @@
 void HUDPickerUI() {
     UI::Text("\\$9CFRace\\$z");
     for (uint i = 0; i < raceElements.Length; i++) {
-        if(UI::MenuItem(raceElements[i].MenuText(), "", raceElements[i].GetVisible(), (!raceElements[i].SubModules.IsEmpty() && !raceElements[i].Module.IsVisible) ? false : true )) {
+        if(UI::MenuItem(raceElements[i].MenuText(), "", raceElements[i].GetVisible(), (raceElements[i].SubModuleName != "" && !raceElements[i].IsParentVisible(uilayers[raceElements[i].ModuleIndex])) ? false : true )) {
             raceElements[i].SetVisible(!raceElements[i].GetVisible());
         }
     }
@@ -9,7 +9,7 @@ void HUDPickerUI() {
     UI::Separator();
     UI::Text("\\$9CFTime Attack\\$z");
     for (uint i = 0; i < timeattackElements.Length; i++) {
-        if(UI::MenuItem(timeattackElements[i].MenuText(), "", timeattackElements[i].GetVisible(), (!timeattackElements[i].SubModules.IsEmpty() && !timeattackElements[i].Module.IsVisible) ? false : true )) {
+        if(UI::MenuItem(timeattackElements[i].MenuText(), "", timeattackElements[i].GetVisible(), (timeattackElements[i].SubModuleName != "" && !timeattackElements[i].IsParentVisible(uilayers[timeattackElements[i].ModuleIndex])) ? false : true )) {
             timeattackElements[i].SetVisible(!timeattackElements[i].GetVisible());
         }
     }
@@ -17,7 +17,7 @@ void HUDPickerUI() {
     UI::Separator();
     UI::Text("\\$9CFKnockout\\$z");
     for (uint i = 0; i < knockoutElements.Length; i++) {
-        if(UI::MenuItem(knockoutElements[i].MenuText(), "", knockoutElements[i].GetVisible(), (!knockoutElements[i].SubModules.IsEmpty() && !knockoutElements[i].Module.IsVisible) ? false : true )) {
+        if(UI::MenuItem(knockoutElements[i].MenuText(), "", knockoutElements[i].GetVisible(), (knockoutElements[i].SubModuleName != "" && !knockoutElements[i].IsParentVisible(uilayers[knockoutElements[i].ModuleIndex])) ? false : true )) {
             knockoutElements[i].SetVisible(!knockoutElements[i].GetVisible());
         }
     }
@@ -41,30 +41,7 @@ void RenderMenu() {
 #endif
 }
 
-void CleanupRefs() {
-    for (uint i = 0; i < raceElements.Length; i++) {
-        raceElements[i].Checked = false;
-        @raceElements[i].Module = null;
-        raceElements[i].SubModules.RemoveRange(0, raceElements[i].SubModules.Length);
-    }
-    for (uint i = 0; i < timeattackElements.Length; i++) {
-        timeattackElements[i].Checked = false;
-        @timeattackElements[i].Module = null;
-        timeattackElements[i].SubModules.RemoveRange(0, timeattackElements[i].SubModules.Length);
-    }
-    for (uint i = 0; i < knockoutElements.Length; i++) {
-        knockoutElements[i].Checked = false;
-        @knockoutElements[i].Module = null;
-        knockoutElements[i].SubModules.RemoveRange(0, knockoutElements[i].SubModules.Length);
-    }
-}
-
-void OnDestroyed() {
-    CleanupRefs();
-}
-void OnDisabled() {
-    CleanupRefs();
-}
+MwFastBuffer<CGameUILayer@> uilayers;
 
 void Main() {
 #if TMNEXT
@@ -79,40 +56,34 @@ void Main() {
         }
         auto playground = app.CurrentPlayground;
         if (playground !is null) {
-            if (network.ClientManiaAppPlayground !is null && network.ClientManiaAppPlayground.Playground !is null && network.ClientManiaAppPlayground.UILayers.Length > 0 && playground.GameTerminals.Length > 0) { 
-                auto uilayers = network.ClientManiaAppPlayground.UILayers;
+            if (network.ClientManiaAppPlayground !is null && network.ClientManiaAppPlayground.Playground !is null && network.ClientManiaAppPlayground.UILayers.Length > 0 && playground.GameTerminals.Length > 0) {
+                uilayers = network.ClientManiaAppPlayground.UILayers;
                 
                 auto uiseq = playground.GameTerminals[0].UISequence_Current;
-                if (uiseq == ESGamePlaygroundUIConfig__EUISequence::Playing) {
+                if (uiseq == SGamePlaygroundUIConfig::EUISequence::Playing) {
                     for (uint i = 0; i < raceElements.Length; i++) {
-                        if (!raceElements[i].Checked) {
-                            raceElements[i].FindElements(uilayers);
+                        if (raceElements[i].ModuleIndex != -1 && raceElements[i].ModuleIndex < int(uilayers.Length)) {
+                            raceElements[i].UpdateVisibilty(uilayers[raceElements[i].ModuleIndex]);
                         } else {
-                            raceElements[i].UpdateVisibilty();
+                            raceElements[i].FindElements(uilayers);
                         }
                     }
                     for (uint i = 0; i < timeattackElements.Length; i++) {
-                        if (!timeattackElements[i].Checked) {
-                            timeattackElements[i].FindElements(uilayers);
+                        if (timeattackElements[i].ModuleIndex != -1 && timeattackElements[i].ModuleIndex < int(uilayers.Length)) {
+                            timeattackElements[i].UpdateVisibilty(uilayers[timeattackElements[i].ModuleIndex]);
                         } else {
-                            timeattackElements[i].UpdateVisibilty();
+                            timeattackElements[i].FindElements(uilayers);
                         }
                     }
                     for (uint i = 0; i < knockoutElements.Length; i++) {
-                        if (!knockoutElements[i].Checked) {
-                            knockoutElements[i].FindElements(uilayers);
+                        if (knockoutElements[i].ModuleIndex != -1 && knockoutElements[i].ModuleIndex < int(uilayers.Length)) {
+                            knockoutElements[i].UpdateVisibilty(uilayers[knockoutElements[i].ModuleIndex]);
                         } else {
-                            knockoutElements[i].UpdateVisibilty();
+                            knockoutElements[i].FindElements(uilayers);
                         }
                     }
                 }
-            } else {
-                // reset all handles to elements when we switch maps/leave current map
-                CleanupRefs();
             }
-        } else {
-            // reset all handles to elements when we switch maps/leave current map
-            CleanupRefs();
         }
         sleep(100);
     }

@@ -1,6 +1,6 @@
 # [HUD Picker](https://openplanet.dev/plugin/hudpicker)
 
-![COTD Stats Image](./opfiles/HUD_Picker.png)
+![HUD Picker Image](./opfiles/HUD_Picker.png)
 
 ## Pick which HUD elements you want to see (DOES NOT work when hide interface enabled)
 
@@ -13,6 +13,9 @@
 Additional UI elements can be added (contact me on the Openplanet discord)
 
 ## Changelog
+
+### v2.2
+- some additional refactor to only store index instead of Nod object. (Hopefully no more crashes)
 
 ### v2.1
 - add null check in order to prevent game from crashing

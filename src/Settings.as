@@ -2,6 +2,12 @@
 [Setting category="General" name="Show dropdown in Main Menu Bar (otherwise will show under scripts menu)"]
 bool showMenu = true;
 
+[Setting category="General" name="Clip the last digit off chrono"]
+bool clipChrono = false;
+
+[Setting category="General" name="Hide black bars during ghost/replay"]
+bool hideScissorRect = false;
+
 // Common Race HUD Settings
 [Setting category="Race" name="Chronometer" description="Located center bottom"]
 bool chronoVisible = true;

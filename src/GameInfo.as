@@ -30,6 +30,23 @@ class GameInfo {
         get const {
             return this.Network.ClientManiaAppPlayground.UILayers;
         }
+        // set {}
+    }
+
+    bool ScissorRect {
+        get const {
+            if (this.app.Viewport.Cameras.Length > 0) {
+                return this.app.Viewport.Cameras[0].ScissorRect;
+            }
+            // Should never reach here, but we just return the opposite value of
+            // global setting so that update doesn't get triggered in main loop
+            return !hideScissorRect;
+        }
+        set {
+            if (this.app.Viewport.Cameras.Length > 0) {
+                this.app.Viewport.Cameras[0].ScissorRect = value;
+            }
+        }
     }
 
     bool IsPlaying() {
@@ -38,9 +55,9 @@ class GameInfo {
         return playground !is null &&
                network.ClientManiaAppPlayground !is null &&
                network.ClientManiaAppPlayground.Playground !is null &&
-               network.ClientManiaAppPlayground.UILayers.Length > 0 &&
-               playground.GameTerminals.Length > 0 &&
-               playground.GameTerminals[0].UISequence_Current == SGamePlaygroundUIConfig::EUISequence::Playing;
+               network.ClientManiaAppPlayground.UILayers.Length > 0;
+            //    playground.GameTerminals.Length > 0 &&
+            //    playground.GameTerminals[0].UISequence_Current == SGamePlaygroundUIConfig::EUISequence::Playing;
     }
 
 }

@@ -14,6 +14,10 @@ Additional UI elements can be added (contact me on the Openplanet discord)
 
 ## Changelog
 
+### v2.3.0
+- added setting: Clip last digit off chrono
+- added setting: Hide Black Bars during ghost/replay
+
 ### v2.2.1
 - fix UI stack unwind, only shows dropdown menu during race
 

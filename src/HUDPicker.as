@@ -60,6 +60,9 @@ void Main() {
             for (uint i = 0; i < raceElements.Length; i++) {
                 if (raceElements[i].ModuleIndex != -1 && raceElements[i].ModuleIndex < int(gameInfo.UILayers.Length)) {
                     raceElements[i].UpdateVisibilty(gameInfo.UILayers[raceElements[i].ModuleIndex]);
+                    if (raceElements[i].Name == "Chronometer") {
+                        cast<ChronoHUDElement@>(raceElements[i]).ClipDigit(gameInfo.UILayers[raceElements[i].ModuleIndex]);
+                    }
                 } else {
                     raceElements[i].FindElements(gameInfo.UILayers);
                 }
@@ -77,6 +80,10 @@ void Main() {
                 } else {
                     knockoutElements[i].FindElements(gameInfo.UILayers);
                 }
+            }
+
+            if (hideScissorRect == gameInfo.ScissorRect) {
+                gameInfo.ScissorRect = !hideScissorRect;
             }
         }
         sleep(100);

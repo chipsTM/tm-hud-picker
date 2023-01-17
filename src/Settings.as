@@ -2,6 +2,24 @@
 [Setting category="General" name="Show dropdown in Main Menu Bar (otherwise will show under scripts menu)"]
 bool showMenu = true;
 
+[Setting category="General" name="Enable Global Color"]
+bool enableGlobalColor = false;
+
+[Setting category="General" name="Global Color" color]
+vec3 globalColor = vec3(1.0,1.0,1.0);
+
+[Setting category="General" name="Enable Global Opacity"]
+bool enableGlobalOpacity = false;
+
+[Setting category="General" name="Global Opacity" min=0.0 max=1.0]
+float globalOpacity = 1.0;
+
+[Setting category="General" name="Rainbow Road"]
+bool rainbowRoad = false;
+
+[Setting category="General" name="Rainbow Rate" min=0.001 max=0.1]
+float rate = 0.001;
+
 [Setting category="General" name="Clip the last digit off chrono"]
 bool clipChrono = false;
 
@@ -12,8 +30,20 @@ bool hideScissorRect = false;
 [Setting category="Race" name="Chronometer" description="Located center bottom"]
 bool chronoVisible = true;
 
+[Setting category="Race" name="Chronometer Color" color]
+vec3 chronoColor = vec3(1.0,1.0,1.0);
+
+[Setting category="Race" name="Chronometer Opacity" min=0.0 max=1.0]
+float chronoOpacity = 1.0;
+
 [Setting category="Race" name="Countdown" description="Located right side screen"]
 bool countdownVisible = true;
+
+[Setting category="Race" name="Countdown Color" color]
+vec3 countdownColor = vec3(0.9725,0.9725,1.0);
+
+[Setting category="Race" name="Countdown Opacity" min=0.0 max=1.0]
+float countdownOpacity = 1.0;
 
 [Setting category="Race" name="Laps Counter" description="Located top right"]
 bool lapscounterVisible = true;
@@ -47,6 +77,9 @@ bool racerankVisible = true;
 
 [Setting category="Race" name="Time Gap" description="Located top left"]
 bool timegapVisible = true;
+
+[Setting category="Race" name="ScoresTableHelper" description=""]
+bool scorestablehelperVisible = true;
 
 // Time Attack HUD Settings
 [Setting category="Time Attack" name="Best Race Viewer"]

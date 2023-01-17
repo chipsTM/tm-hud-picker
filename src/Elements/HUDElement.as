@@ -6,7 +6,7 @@ class HUDElement {
     bool GetVisible() { return true; }
     void SetVisible(bool v) { }
 
-    HUDElement(const string &in name, const string &in moduleName, string subModuleName = "") {
+    HUDElement(const string &in name, const string &in moduleName, const string &in subModuleName = "") {
         this.Name = name;
         this.ModuleName = moduleName;
         this.ModuleIndex = -1;
@@ -23,6 +23,8 @@ class HUDElement {
         }
         return false;
     }
+
+    void SetStyle(CGameUILayer@ layer) {}
 
     bool Exists(CGameUILayer@ curLayer) {
         int start = curLayer.ManialinkPageUtf8.IndexOf("<");

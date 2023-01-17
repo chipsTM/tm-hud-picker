@@ -12,6 +12,7 @@ array<HUDElement@> raceElements = {
     racetimediff,
     racerank,
     timegap
+    // scorestablehelper only shows 50 times then disappears
 };
 
 array<HUDElement@> timeattackElements = {

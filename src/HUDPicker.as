@@ -59,7 +59,9 @@ void Main() {
         if (gameInfo.IsPlaying()) {
             for (uint i = 0; i < raceElements.Length; i++) {
                 if (raceElements[i].ModuleIndex != -1 && raceElements[i].ModuleIndex < int(gameInfo.UILayers.Length)) {
-                    raceElements[i].UpdateVisibilty(gameInfo.UILayers[raceElements[i].ModuleIndex]);
+                    auto uilayer = gameInfo.UILayers[raceElements[i].ModuleIndex];
+                    raceElements[i].UpdateVisibilty(uilayer);
+                    raceElements[i].SetStyle(uilayer);
                     if (raceElements[i].Name == "Chronometer") {
                         cast<ChronoHUDElement@>(raceElements[i]).ClipDigit(gameInfo.UILayers[raceElements[i].ModuleIndex]);
                     }
@@ -86,7 +88,7 @@ void Main() {
                 gameInfo.ScissorRect = !hideScissorRect;
             }
         }
-        sleep(100);
+        yield();
     }
 #endif
 }

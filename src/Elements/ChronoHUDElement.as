@@ -1,4 +1,6 @@
 class ChronoHUDElement : HUDElement {
+    float i = Math::Rand(0.0, 1.0);
+
     ChronoHUDElement() {
         super("Chronometer", "UIModule_Race_Chrono", "");
     }
@@ -9,6 +11,29 @@ class ChronoHUDElement : HUDElement {
 
     void SetVisible(bool v) override {
         chronoVisible = v;
+    }
+
+    void SetStyle(CGameUILayer@ layer) override{
+        CGameManialinkLabel@ mlabel = cast<CGameManialinkLabel@>(layer.LocalPage.GetFirstChild("label-chrono"));
+        if (mlabel !is null) {
+            if (rainbowRoad) {
+                if (i > 1.0) {
+                    i = 0.0;
+                }
+                vec4 newColor = UI::HSV(i, 1.0, 1.0);
+                mlabel.TextColor = vec3(newColor.x, newColor.y, newColor.z);
+                i += rate;
+            } else if (enableGlobalColor) {
+                mlabel.TextColor = globalColor;
+            } else {
+                mlabel.TextColor = chronoColor;
+            }
+            if (enableGlobalOpacity) {
+                mlabel.Opacity = globalOpacity;
+            } else {
+                mlabel.Opacity = chronoOpacity;
+            }
+        }
     }
     
     void ClipDigit(CGameUILayer@ layer) {

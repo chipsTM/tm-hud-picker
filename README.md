@@ -14,6 +14,9 @@ Additional UI elements can be added (contact me on the Openplanet discord)
 
 ## Changelog
 
+### v2.4.0
+- added ability to set color and opacity of chrono/countdown
+
 ### v2.3.0
 - added setting: Clip last digit off chrono
 - added setting: Hide Black Bars during ghost/replay

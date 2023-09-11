@@ -26,27 +26,18 @@ class GameInfo {
         // set {}
     }
 
-    MwFastBuffer<CGameUILayer@> UILayers {
+    MwFastBuffer<CGameUILayer@> NetworkUILayers {
         get const {
             return this.Network.ClientManiaAppPlayground.UILayers;
         }
         // set {}
     }
 
-    bool ScissorRect {
+    CControlFrame@ ClientManialinkPage {
         get const {
-            if (this.app.Viewport.Cameras.Length > 0) {
-                return this.app.Viewport.Cameras[0].ScissorRect;
-            }
-            // Should never reach here, but we just return the opposite value of
-            // global setting so that update doesn't get triggered in main loop
-            return !hideScissorRect;
+            return cast<CGamePlayground@>(cast<CSmArenaClient@>(this.CurrentPlayground).Arena).Interface.ManialinkPage;
         }
-        set {
-            if (this.app.Viewport.Cameras.Length > 0) {
-                this.app.Viewport.Cameras[0].ScissorRect = value;
-            }
-        }
+        // set {}
     }
 
     bool IsPlaying() {

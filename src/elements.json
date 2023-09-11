@@ -1,0 +1,216 @@
+{
+    "Race": [
+        {
+            "controlId": "Race_Chrono",
+            "displayName": "Chrono",
+            "visibility": true,
+            "description": "chrono at bottom of screen",
+            "index": -1,
+            "changed": false,
+            "styles": {
+                "label-chrono.textcolor": [1.0, 1.0, 1.0]
+            },
+            "children": []
+        },
+        {
+            "controlId": "Race_RespawnHelper",
+            "displayName": "Respawn Helper",
+            "visibility": true,
+            "description": "appears after some time when car standing still",
+            "index": -1,
+            "changed": false,
+            "children": []
+        },
+        {
+            "controlId": "Race_Checkpoint",
+            "displayName": "Checkpoint",
+            "visibility": true,
+            "description": "checkpoint info",
+            "index": -1,
+            "changed": false,
+            "children": [
+                {
+                    "controlId": "Race_Checkpoint|frame-checkpoint|frame-race|frame-race-time",
+                    "displayName": "Race Time",
+                    "visibility": true,
+                    "description": "",
+                    "index": -1,
+                    "changed": false,
+                    "children": []
+                },
+                {
+                    "controlId": "Race_Checkpoint|frame-checkpoint|frame-race|frame-race-diff",
+                    "displayName": "Race Diff",
+                    "visibility": true,
+                    "description": "",
+                    "index": -1,
+                    "changed": false,
+                    "children": []
+                },
+                {
+                    "controlId": "Race_Checkpoint|frame-checkpoint|frame-race|frame-race-rank",
+                    "displayName": "Race Rank",
+                    "visibility": true,
+                    "description": "",
+                    "index": -1,
+                    "changed": false,
+                    "children": []
+                },
+                {
+                    "controlId": "Race_Checkpoint|frame-checkpoint|frame-lap|frame-lap-time",
+                    "displayName": "Lap Time",
+                    "visibility": true,
+                    "description": "",
+                    "index": -1,
+                    "changed": false,
+                    "children": []
+                },
+                {
+                    "controlId": "Race_Checkpoint|frame-checkpoint|frame-lap|frame-lap-diff",
+                    "displayName": "Lap Diff",
+                    "visibility": true,
+                    "description": "",
+                    "index": -1,
+                    "changed": false,
+                    "children": []
+                },
+                {
+                    "controlId": "Race_Checkpoint|frame-checkpoint|frame-lap|frame-lap-legend",
+                    "displayName": "Lap Legend",
+                    "visibility": true,
+                    "description": "",
+                    "index": -1,
+                    "changed": false,
+                    "children": []
+                }
+            ]
+        },
+        {
+            "controlId": "Race_LapsCounter",
+            "displayName": "Laps Counter",
+            "visibility": true,
+            "description": "located top right on a multi-lap race",
+            "index": -1,
+            "changed": false,
+            "children": []
+        },
+        {
+            "controlId": "Race_TimeGap",
+            "displayName": "Time Gap",
+            "visibility": true,
+            "description": "???",
+            "index": -1,
+            "changed": false,
+            "children": []
+        },
+        {
+            "controlId": "Race_ScoresTable",
+            "displayName": "Scores Table",
+            "visibility": true,
+            "description": "shown when holding tab",
+            "index": -1,
+            "changed": false,
+            "children": []
+        },
+        {
+            "controlId": "Race_DisplayMessage",
+            "displayName": "Display Message",
+            "visibility": true,
+            "description": "???",
+            "index": -1,
+            "changed": false,
+            "children": []
+        },
+        {
+            "controlId": "Race_Countdown",
+            "displayName": "Countdown",
+            "visibility": true,
+            "description": "countdown on an online server",
+            "index": -1,
+            "changed": false,
+            "children": []
+        },
+        {
+            "controlId": "Race_Record",
+            "displayName": "Records",
+            "visibility": true,
+            "description": "records table on left",
+            "index": -1,
+            "changed": false,
+            "children": []
+        },
+        {
+            "controlId": "Race_BigMessage",
+            "displayName": "Big Message",
+            "visibility": true,
+            "description": "???",
+            "index": -1,
+            "changed": false,
+            "children": []
+        },
+        {
+            "controlId": "Race_BlockHelper",
+            "displayName": "Block Helper",
+            "visibility": true,
+            "description": "block effect messages",
+            "index": -1,
+            "changed": false,
+            "children": []
+        },
+        {
+            "controlId": "Race_WarmUp",
+            "displayName": "Warm Up",
+            "visibility": true,
+            "description": "???",
+            "index": -1,
+            "changed": false,
+            "children": []
+        },
+        {
+            "controlId": "Race_VoiceChat",
+            "displayName": "Voice Chat",
+            "visibility": true,
+            "description": "???",
+            "index": -1,
+            "changed": false,
+            "children": []
+        },
+        {
+            "controlId": "Race_PrestigeEarned",
+            "displayName": "Prestige Earned",
+            "visibility": true,
+            "description": "???",
+            "index": -1,
+            "changed": false,
+            "children": []
+        },
+        {
+            "controlId": "Race_LoadingScreen",
+            "displayName": "Loading Screen",
+            "visibility": true,
+            "description": "???",
+            "index": -1,
+            "changed": false,
+            "children": []
+        },
+        {
+            "controlId": "Race_BestRaceViewer",
+            "displayName": "Best Race Viewer",
+            "visibility": true,
+            "description": "???",
+            "index": -1,
+            "changed": false,
+            "children": []
+        },
+        {
+            "controlId": "Race_SpectatorBase_Commands",
+            "displayName": "Spectator Base Commands",
+            "visibility": true,
+            "description": "Need more info",
+            "index": -1,
+            "changed": false,
+            "children": []
+        }
+    ],
+    "Knockout": []
+}

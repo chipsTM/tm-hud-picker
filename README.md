@@ -1,6 +1,6 @@
 # [HUD Picker](https://openplanet.dev/plugin/hudpicker)
 
-![HUD Picker Image](./opfiles/HUD_Picker.png)
+![HUD Picker Image](./opfiles/HUD_Picker_v3.png)
 
 ## Pick which HUD elements you want to see (DOES NOT work when hide interface enabled)
 

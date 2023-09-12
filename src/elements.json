@@ -8,7 +8,13 @@
             "index": -1,
             "changed": false,
             "styles": {
-                "label-chrono.textcolor": [1.0, 1.0, 1.0]
+                "label-chrono": {
+                    "textcolor": [1.0, 1.0, 1.0],
+                    "rainbow_enabled": false,
+                    "rainbow_rate": 0.001,
+                    "rainbow_val": 0.0,
+                    "clip_digit": false
+                }
             },
             "children": []
         },
@@ -98,7 +104,7 @@
             "controlId": "Race_TimeGap",
             "displayName": "Time Gap",
             "visibility": true,
-            "description": "???",
+            "description": "need more info",
             "index": -1,
             "changed": false,
             "children": []
@@ -116,7 +122,7 @@
             "controlId": "Race_DisplayMessage",
             "displayName": "Display Message",
             "visibility": true,
-            "description": "???",
+            "description": "need more info",
             "index": -1,
             "changed": false,
             "children": []
@@ -143,7 +149,7 @@
             "controlId": "Race_BigMessage",
             "displayName": "Big Message",
             "visibility": true,
-            "description": "???",
+            "description": "need more info",
             "index": -1,
             "changed": false,
             "children": []
@@ -161,7 +167,7 @@
             "controlId": "Race_WarmUp",
             "displayName": "Warm Up",
             "visibility": true,
-            "description": "???",
+            "description": "need more info",
             "index": -1,
             "changed": false,
             "children": []
@@ -170,7 +176,7 @@
             "controlId": "Race_VoiceChat",
             "displayName": "Voice Chat",
             "visibility": true,
-            "description": "???",
+            "description": "need more info",
             "index": -1,
             "changed": false,
             "children": []
@@ -179,7 +185,7 @@
             "controlId": "Race_PrestigeEarned",
             "displayName": "Prestige Earned",
             "visibility": true,
-            "description": "???",
+            "description": "prestige earned screen",
             "index": -1,
             "changed": false,
             "children": []
@@ -188,7 +194,7 @@
             "controlId": "Race_LoadingScreen",
             "displayName": "Loading Screen",
             "visibility": true,
-            "description": "???",
+            "description": "need more info",
             "index": -1,
             "changed": false,
             "children": []
@@ -197,7 +203,7 @@
             "controlId": "Race_BestRaceViewer",
             "displayName": "Best Race Viewer",
             "visibility": true,
-            "description": "???",
+            "description": "need more info",
             "index": -1,
             "changed": false,
             "children": []
@@ -206,7 +212,7 @@
             "controlId": "Race_SpectatorBase_Commands",
             "displayName": "Spectator Base Commands",
             "visibility": true,
-            "description": "Need more info",
+            "description": "need more info",
             "index": -1,
             "changed": false,
             "children": []

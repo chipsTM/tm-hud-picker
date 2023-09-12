@@ -70,19 +70,9 @@ void UpdateVisibility(Json::Value@ obj) {
     obj["changed"] = false;
 }
 
-void UpdateStyle(Json::Value@ obj) {
+void UpdateStyles(Json::Value@ obj) {
     if (!obj.HasKey("styles")) return;
-    CGameManialinkPage@ Page = gameInfo.NetworkUILayers[uint(obj["index"])].LocalPage;
-    auto styleKeys = obj["styles"].GetKeys();
-    for (uint i = 0; i < styleKeys.Length; i++) {
-        array<string> parts = styleKeys[i].Split(".");
-        CGameManialinkControl@ control = Page.GetFirstChild(parts[0]);
-        if (parts[1] == "textcolor") {
-            CGameManialinkLabel@ label = cast<CGameManialinkLabel@>(control);
-            auto val = obj["styles"][styleKeys[i]];
-            label.TextColor = vec3(val[0], val[1], val[2]);
-        }
-    }
+    if (string(obj["controlId"]) == "Race_Chrono") ChronoStyles(obj);
 }
 
 void IterateSection(const string &in section) {
@@ -94,7 +84,7 @@ void IterateSection(const string &in section) {
             continue;
         }
         UpdateVisibility(uiDic[section][i]);
-        UpdateStyle(uiDic[section][i]);
+        UpdateStyles(uiDic[section][i]);
 
         if (uiDic[section][i]["children"].Length > 0) {
             for (uint j = 0; j < uiDic[section][i]["children"].Length; j++) {
@@ -115,19 +105,19 @@ auto plugin = Meta::ExecutingPlugin();
 Json::Value@ uiDic = Json::Object();
 
 void OnSettingsSave(Settings::Section& section) {
-    auto curSettings = plugin.GetSetting("SerializedData");
-    curSettings.WriteString(Json::Write(uiDic));
+    Json::ToFile(IO::FromStorageFolder("settings.json"), uiDic);
 }
 
 void Main() {
     @gameInfo = GameInfo();
 
     // Initial settings load 
-    auto curSettings = plugin.GetSetting("SerializedData");
-    if (curSettings.ReadString() == "") {
+    auto curSettings = Json::FromFile(IO::FromStorageFolder("settings.json"));
+    if (curSettings.GetType() == Json::Type::Null) {
         uiDic = Json::FromFile("src/elements.json");
+        Json::ToFile(IO::FromStorageFolder("settings.json"), uiDic);
     } else {
-        uiDic = Json::Parse(curSettings.ReadString());
+        uiDic = curSettings;
     }
 
     while(true) {

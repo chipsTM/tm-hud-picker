@@ -1,4 +1,5 @@
 {
+    "layerCount": 0,
     "Race": [
         {
             "controlId": "Race_Chrono",
@@ -104,7 +105,7 @@
             "controlId": "Race_TimeGap",
             "displayName": "Time Gap",
             "visibility": true,
-            "description": "need more info",
+            "description": "time gap bottom right showing diff between players",
             "index": -1,
             "changed": false,
             "children": []
@@ -203,7 +204,7 @@
             "controlId": "Race_BestRaceViewer",
             "displayName": "Best Race Viewer",
             "visibility": true,
-            "description": "need more info",
+            "description": "best times on right",
             "index": -1,
             "changed": false,
             "children": []

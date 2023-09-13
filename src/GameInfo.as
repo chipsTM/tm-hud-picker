@@ -43,12 +43,16 @@ class GameInfo {
     bool IsPlaying() {
         auto network = Network;
         auto playground = CurrentPlayground;
-        return playground !is null &&
-               network.ClientManiaAppPlayground !is null &&
-               network.ClientManiaAppPlayground.Playground !is null &&
-               network.ClientManiaAppPlayground.UILayers.Length > 0;
-            //    playground.GameTerminals.Length > 0 &&
-            //    playground.GameTerminals[0].UISequence_Current == SGamePlaygroundUIConfig::EUISequence::Playing;
+        if (playground !is null && network.ClientManiaAppPlayground !is null && network.ClientManiaAppPlayground.Playground !is null) {
+            if (network.ClientManiaAppPlayground.UILayers.Length > 0 && network.ClientManiaAppPlayground.UILayers.Length == int(uiDic["layerCount"])) {
+                return true;
+            } else {
+                uiDic["layerCount"] = network.ClientManiaAppPlayground.UILayers.Length;
+                return false;
+            }
+        } else {
+            return false;
+        }
     }
 
 }

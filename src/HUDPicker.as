@@ -61,6 +61,7 @@ void UpdateVisibility(Json::Value@ obj) {
     }
 
     auto c = Page.GetFirstChild(parts[0]);
+    if (c is null) return;
     if (c.ControlId != parts[0]) return;
     if (bool(obj["visibility"])) {
         c.Show();

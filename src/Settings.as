@@ -25,7 +25,8 @@ void RenderHUDTreeSettings() {
             resetSwitch = true;
             UI::SameLine();
             if (UI::Button("Reset")) {
-                uiDic = Json::FromFile("src/elements.json");
+                uiDic = Json::Parse(elementsJson);
+                // uiDic = Json::FromFile("src/elements.json");
                 ResetIndexes("Race");
                 ResetIndexes("Knockout");
                 resetSwitch = false;

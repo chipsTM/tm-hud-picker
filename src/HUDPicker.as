@@ -115,7 +115,8 @@ void Main() {
     // Initial settings load 
     auto curSettings = Json::FromFile(IO::FromStorageFolder("settings.json"));
     if (curSettings.GetType() == Json::Type::Null) {
-        uiDic = Json::FromFile("src/elements.json");
+        uiDic = Json::Parse(elementsJson);
+        // uiDic = Json::FromFile("src/elements.json");
         Json::ToFile(IO::FromStorageFolder("settings.json"), uiDic);
     } else {
         uiDic = curSettings;

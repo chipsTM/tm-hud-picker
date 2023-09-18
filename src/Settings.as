@@ -2,7 +2,7 @@ bool resetSwitch = false;
 
 [SettingsTab name="HUD Tree" icon="Kenney::Car"]
 void RenderHUDTreeSettings() {
-    UI::Text("DISCLAIMER: You are responsible for ensuring you re-enable any hidden elements");
+    UI::TextWrapped("DISCLAIMER: You are responsible for ensuring you re-enable any hidden elements. Otherwise disabling the plugin should re-enable all elements");
     if (gameInfo.IsPlaying()) {
         if (UI::TreeNode("Race", UI::TreeNodeFlags::Framed)) {
             for (uint i = 0; i < uiDic["Race"].Length; i++) {
@@ -17,7 +17,7 @@ void RenderHUDTreeSettings() {
             UI::TreePop();
         }
     } else {
-        UI::Text("\\$FF0You need to be in a valid playground to change these settings\\$z");
+        UI::TextWrapped("\\$FF0You need to be in a valid playground to change these settings\\$z");
     }
     if (UI::TreeNode("Reset Settings Here", UI::TreeNodeFlags::Framed)) {
         bool switchActive = UI::Checkbox("Click here first to reset", resetSwitch);

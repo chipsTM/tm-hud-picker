@@ -26,7 +26,7 @@ void ResetIndexes(const string &in section) {
     }
 }
 
-void UpdateVisibility(Json::Value@ obj) {
+void UpdateVisibility(Json::Value@ obj, int status) {
     if (!bool(obj["changed"])) return;
 
     array<string> parts = string(obj["controlId"]).Split("|");
@@ -37,20 +37,28 @@ void UpdateVisibility(Json::Value@ obj) {
         if (control is null) return;
         array<CGameManialinkFrame@> frames = { cast<CGameManialinkFrame@>(control) };
         while (!frames.IsEmpty()) {
-            if (bool(obj["visibility"])) {
+            if (status == -1) {
                 frames[0].Show();
             } else {
-                frames[0].Hide();
+                if (bool(obj["visibility"])) {
+                    frames[0].Show();
+                } else {
+                    frames[0].Hide();
+                }
             }
             MwFastBuffer<CGameManialinkControl@> children = frames[0].Controls;
             for (uint i = 0; i < children.Length; i++) {
                 if (Reflection::TypeOf(children[i]).Name == "CGameManialinkFrame") {
                     frames.InsertLast(cast<CGameManialinkFrame@>(children[i]));
                 } else {
-                    if (bool(obj["visibility"])) {
+                    if (status == -1) {
                         children[i].Show();
                     } else {
-                        children[i].Hide();
+                        if (bool(obj["visibility"])) {
+                            children[i].Show();
+                        } else {
+                            children[i].Hide();
+                        }
                     }
                 }
             }
@@ -63,20 +71,24 @@ void UpdateVisibility(Json::Value@ obj) {
     auto c = Page.GetFirstChild(parts[0]);
     if (c is null) return;
     if (c.ControlId != parts[0]) return;
-    if (bool(obj["visibility"])) {
+    if (status == -1) {
         c.Show();
     } else {
-        c.Hide();
+        if (bool(obj["visibility"])) {
+            c.Show();
+        } else {
+            c.Hide();
+        }
     }
     obj["changed"] = false;
 }
 
-void UpdateStyles(Json::Value@ obj) {
+void UpdateStyles(Json::Value@ obj, int status) {
     if (!obj.HasKey("styles")) return;
-    if (string(obj["controlId"]) == "Race_Chrono") ChronoStyles(obj);
+    if (string(obj["controlId"]) == "Race_Chrono") ChronoStyles(obj, status);
 }
 
-void IterateSection(const string &in section) {
+void IterateSection(const string &in section, int status) {
     for (uint i = 0; i < uiDic[section].Length; i++) {
         if (int(uiDic[section][i]["index"]) == -1) {
             UpdateIndex(uiDic[section][i]);
@@ -84,8 +96,11 @@ void IterateSection(const string &in section) {
         if (int(uiDic[section][i]["index"]) == -2) {
             continue;
         }
-        UpdateVisibility(uiDic[section][i]);
-        UpdateStyles(uiDic[section][i]);
+        if (status != 0) {
+            uiDic[section][i]["changed"] = true;
+        }
+        UpdateVisibility(uiDic[section][i], status);
+        UpdateStyles(uiDic[section][i], status);
 
         if (uiDic[section][i]["children"].Length > 0) {
             for (uint j = 0; j < uiDic[section][i]["children"].Length; j++) {
@@ -95,7 +110,10 @@ void IterateSection(const string &in section) {
                 if (int(uiDic[section][i]["children"][j]["index"]) == -2) {
                     continue;
                 }
-                UpdateVisibility(uiDic[section][i]["children"][j]);
+                if (status != 0) {
+                    uiDic[section][i]["children"][j]["changed"] = true;
+                }
+                UpdateVisibility(uiDic[section][i]["children"][j], status);
             }
         }
     }
@@ -107,6 +125,25 @@ Json::Value@ uiDic = Json::Object();
 
 void OnSettingsSave(Settings::Section& section) {
     Json::ToFile(IO::FromStorageFolder("settings.json"), uiDic);
+}
+
+void SetVis(int val) {
+    if (gameInfo.IsPlaying()) {
+        IterateSection("Race", val);
+        IterateSection("Knockout", val);
+    }
+}
+
+void OnEnabled() {
+    SetVis(1);
+}
+
+void OnDisabled() {
+    SetVis(-1);
+}
+
+void OnDestroyed() {
+    SetVis(-1);
 }
 
 void Main() {
@@ -121,6 +158,8 @@ void Main() {
     } else {
         uiDic = curSettings;
     }
+    // load current state
+    SetVis(1);
 
     while(true) {
         yield();
@@ -129,8 +168,8 @@ void Main() {
             yield();
         }
         if (gameInfo.IsPlaying()) {
-            IterateSection("Race");
-            IterateSection("Knockout");
+            IterateSection("Race", 0);
+            IterateSection("Knockout", 0);
         } else {
             ResetIndexes("Race");
             ResetIndexes("Knockout");

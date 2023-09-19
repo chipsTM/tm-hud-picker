@@ -14,14 +14,14 @@ void UpdateIndex(Json::Value@ obj) {
 
 void ResetIndexes(const string &in section) {
     for (uint i = 0; i < uiDic[section].Length; i++) {
+        uiDic[section][i]["changed"] = true;
+        uiDic[section][i]["index"] = -1;
+
         if (uiDic[section][i]["children"].Length > 0) {
             for (uint j = 0; j < uiDic[section][i]["children"].Length; j++) {
                 uiDic[section][i]["children"][j]["index"] = -1;
                 uiDic[section][i]["children"][j]["changed"] = true;
             }
-        } else {
-            uiDic[section][i]["changed"] = true;
-            uiDic[section][i]["index"] = -1;
         }
     }
 }

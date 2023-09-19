@@ -14,6 +14,9 @@ Additional UI elements can be added (contact me on the Openplanet discord)
 
 ## Changelog
 
+### v3.0.1
+- fix index reset
+
 ### v3.0.0
 - major refactor of architecture and features
 - removed: hide black bars during ghost/replay (this is not needed anymore)

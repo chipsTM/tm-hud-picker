@@ -146,10 +146,12 @@ void OnDestroyed() {
     SetVis(-1);
 }
 
+bool prev_isOverlayShown = false;
+
 void Main() {
     @gameInfo = GameInfo();
 
-    // Initial settings load 
+    // Initial settings load
     auto curSettings = Json::FromFile(IO::FromStorageFolder("settings.json"));
     if (curSettings.GetType() == Json::Type::Null) {
         uiDic = Json::Parse(elementsJson);
@@ -166,6 +168,14 @@ void Main() {
         // wait until playground finishes loading
         while (gameInfo.LoadProgress.State == NGameLoadProgress_SMgr::EState::Displayed) {
             yield();
+        }
+        if (toggleInterface && UI::IsOverlayShown() != prev_isOverlayShown) {
+            prev_isOverlayShown = UI::IsOverlayShown();
+            if (prev_isOverlayShown) {
+                OnDisabled();
+            } else {
+                OnEnabled();
+            }
         }
         if (gameInfo.IsPlaying()) {
             IterateSection("Race", 0);

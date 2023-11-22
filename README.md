@@ -14,6 +14,9 @@ Additional UI elements can be added (contact me on the Openplanet discord)
 
 ## Changelog
 
+### v3.0.2
+- fix for game update
+
 ### v3.0.1
 - fix index reset
 

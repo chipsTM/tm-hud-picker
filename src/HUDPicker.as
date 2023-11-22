@@ -164,7 +164,7 @@ void Main() {
     while(true) {
         yield();
         // wait until playground finishes loading
-        while (gameInfo.LoadProgress.State == NGameLoadProgress_SMgr::EState::Displayed) {
+        while (gameInfo.LoadProgress.State == NGameLoadProgress::EState::Displayed) {
             yield();
         }
         if (gameInfo.IsPlaying()) {

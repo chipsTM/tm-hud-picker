@@ -146,7 +146,7 @@ void OnDestroyed() {
     SetVis(-1);
 }
 
-bool prev_isOverlayShown = false;
+bool first_hidden = true;
 
 void Main() {
     @gameInfo = GameInfo();
@@ -177,10 +177,14 @@ void Main() {
                 OnEnabled();
             }
         }
-        if (gameInfo.IsPlaying()) {
+        if (gameInfo.IsPlaying() && (!toggleInterface || !UI::IsOverlayShown()) ) {
+            int hidden = first_hidden ? 1 : 0;
+            first_hidden = false;
             IterateSection("Race", 0);
             IterateSection("Knockout", 0);
         } else {
+            if (!first_hidden) OnDisabled();
+            first_hidden = true;
             ResetIndexes("Race");
             ResetIndexes("Knockout");
         }

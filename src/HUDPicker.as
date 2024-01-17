@@ -146,10 +146,12 @@ void OnDestroyed() {
     SetVis(-1);
 }
 
+bool first_hidden = true;
+
 void Main() {
     @gameInfo = GameInfo();
 
-    // Initial settings load 
+    // Initial settings load
     auto curSettings = Json::FromFile(IO::FromStorageFolder("settings.json"));
     if (curSettings.GetType() == Json::Type::Null) {
         uiDic = Json::Parse(elementsJson);
@@ -167,10 +169,22 @@ void Main() {
         while (gameInfo.LoadProgress.State == NGameLoadProgress::EState::Displayed) {
             yield();
         }
-        if (gameInfo.IsPlaying()) {
+        if (toggleInterface && UI::IsOverlayShown() != prev_isOverlayShown) {
+            prev_isOverlayShown = UI::IsOverlayShown();
+            if (prev_isOverlayShown) {
+                OnDisabled();
+            } else {
+                OnEnabled();
+            }
+        }
+        if (gameInfo.IsPlaying() && (!toggleInterface || !UI::IsOverlayShown()) ) {
+            int hidden = first_hidden ? 1 : 0;
+            first_hidden = false;
             IterateSection("Race", 0);
             IterateSection("Knockout", 0);
         } else {
+            if (!first_hidden) OnDisabled();
+            first_hidden = true;
             ResetIndexes("Race");
             ResetIndexes("Knockout");
         }

@@ -146,10 +146,12 @@ void OnDestroyed() {
     SetVis(-1);
 }
 
+bool overlay_displayed = true;
+
 void Main() {
     @gameInfo = GameInfo();
 
-    // Initial settings load 
+    // Initial settings load
     auto curSettings = Json::FromFile(IO::FromStorageFolder("settings.json"));
     if (curSettings.GetType() == Json::Type::Null) {
         uiDic = Json::Parse(elementsJson);
@@ -167,10 +169,21 @@ void Main() {
         while (gameInfo.LoadProgress.State == NGameLoadProgress::EState::Displayed) {
             yield();
         }
-        if (gameInfo.IsPlaying()) {
+        if (toggleInterface && UI::IsOverlayShown() != overlay_displayed) {
+            overlay_displayed = UI::IsOverlayShown();
+            if (overlay_displayed) {
+                OnDisabled();
+            } else {
+                OnEnabled();
+            }
+        }
+        if (gameInfo.IsPlaying() && (!toggleInterface || !UI::IsOverlayShown())) {
+            overlay_displayed = false;
             IterateSection("Race", 0);
             IterateSection("Knockout", 0);
         } else {
+            if (!overlay_displayed) OnDisabled();
+            overlay_displayed = true;
             ResetIndexes("Race");
             ResetIndexes("Knockout");
         }

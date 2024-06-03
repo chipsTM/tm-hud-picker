@@ -2,6 +2,8 @@ bool resetSwitch = false;
 
 [SettingsTab name="HUD Tree" icon="Kenney::Car"]
 void RenderHUDTreeSettings() {
+    toggleInterface = UI::Checkbox("Disable HUD Picker when Openplanet overlay is open", toggleInterface);
+    UI::Text("");
     UI::TextWrapped("DISCLAIMER: You are responsible for ensuring you re-enable any hidden elements. Otherwise disabling the plugin should re-enable all elements");
     if (gameInfo.IsPlaying()) {
         if (UI::TreeNode("Race", UI::TreeNodeFlags::Framed)) {

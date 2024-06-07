@@ -1,5 +1,8 @@
 bool resetSwitch = false;
 
+[Setting hidden]
+bool toggleInterface = false;
+
 [SettingsTab name="HUD Tree" icon="Kenney::Car"]
 void RenderHUDTreeSettings() {
     toggleInterface = UI::Checkbox("Disable HUD Picker when Openplanet overlay is open", toggleInterface);

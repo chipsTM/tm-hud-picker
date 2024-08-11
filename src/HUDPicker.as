@@ -26,6 +26,19 @@ void ResetIndexes(const string &in section) {
     }
 }
 
+void GetState(const string &in section, Json::Value@ state) {
+    for (uint i = 0; i < uiDic[section].Length; i++) {
+        array<string> parts = string(uiDic[section][i]["controlId"]).Split("|");
+        if (uiDic[section][i]["index"] == -1 || uiDic[section][i]["index"] == -2) break;
+        CGameManialinkPage@ Page = gameInfo.NetworkUILayers[uint(uiDic[section][i]["index"])].LocalPage;
+        
+        auto c = Page.GetFirstChild(parts[0]);
+        if (c is null) return;
+        if (c.ControlId != parts[0]) return;
+        state[parts[0]] = c.Visible;
+    }
+}
+
 void UpdateVisibility(Json::Value@ obj, int status) {
     if (!bool(obj["changed"])) return;
 
@@ -71,6 +84,7 @@ void UpdateVisibility(Json::Value@ obj, int status) {
     auto c = Page.GetFirstChild(parts[0]);
     if (c is null) return;
     if (c.ControlId != parts[0]) return;
+    if (!bool(stateJson[parts[0]])) return;
     if (status == -1) {
         c.Show();
     } else {
@@ -99,6 +113,9 @@ void IterateSection(const string &in section, int status) {
         if (status != 0) {
             uiDic[section][i]["changed"] = true;
         }
+        if (!stateCaptured) {
+            GetState("Race", stateJson);
+        }
         UpdateVisibility(uiDic[section][i], status);
         UpdateStyles(uiDic[section][i], status);
 
@@ -117,11 +134,16 @@ void IterateSection(const string &in section, int status) {
             }
         }
     }
+    if (!stateCaptured) {
+        stateCaptured = true;
+    }
 }
 
 GameInfo@ gameInfo;
 auto plugin = Meta::ExecutingPlugin();
 Json::Value@ uiDic = Json::Object();
+Json::Value@ stateJson = Json::Parse(originalState);
+bool stateCaptured = false;
 
 void OnSettingsSave(Settings::Section& section) {
     Json::ToFile(IO::FromStorageFolder("settings.json"), uiDic);
@@ -131,6 +153,8 @@ void SetVis(int val) {
     if (gameInfo.IsPlaying()) {
         IterateSection("Race", val);
         IterateSection("Knockout", val);
+    } else {
+        stateCaptured = false;
     }
 }
 
@@ -186,6 +210,7 @@ void Main() {
             overlay_displayed = true;
             ResetIndexes("Race");
             ResetIndexes("Knockout");
+            stateCaptured = false;
         }
     }
 }

@@ -14,6 +14,15 @@ Additional UI elements can be added (contact me on the Openplanet discord)
 
 ## Changelog
 
+### v3.2.0
+- adhere to server UI state
+
+### v3.1.1
+- fix error
+
+### v3.1.0
+- add option to disable HUD Picker when overlay open - titisee5
+
 ### v3.0.2
 - fix for game update
 

@@ -14,6 +14,9 @@ Additional UI elements can be added (contact me on the Openplanet discord)
 
 ## Changelog
 
+### v3.2.1
+- fix overlay open logic
+
 ### v3.2.0
 - adhere to server UI state
 

@@ -84,10 +84,10 @@ void UpdateVisibility(Json::Value@ obj, int status) {
     auto c = Page.GetFirstChild(parts[0]);
     if (c is null) return;
     if (c.ControlId != parts[0]) return;
-    if (!bool(stateJson[parts[0]])) return;
     if (status == -1) {
         c.Show();
     } else {
+        if (!bool(stateJson[parts[0]])) return;
         if (bool(obj["visibility"])) {
             c.Show();
         } else {

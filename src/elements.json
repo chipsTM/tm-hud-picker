@@ -138,6 +138,24 @@
             "children": []
         },
         {
+            "controlId": "clip-medal-banner",
+            "displayName": "Medal Banner",
+            "visibility": true,
+            "description": "Medals Top Left",
+            "index": -1,
+            "changed": false,
+            "children": []
+        },
+        {
+            "controlId": "frame-celebration",
+            "displayName": "Celebration Frame",
+            "visibility": true,
+            "description": "Medal Celebration",
+            "index": -1,
+            "changed": false,
+            "children": []
+        },
+        {
             "controlId": "Race_Record",
             "displayName": "Records",
             "visibility": true,
@@ -212,6 +230,15 @@
         {
             "controlId": "Race_SpectatorBase_Commands",
             "displayName": "Spectator Base Commands",
+            "visibility": true,
+            "description": "need more info",
+            "index": -1,
+            "changed": false,
+            "children": []
+        },
+        {
+            "controlId": "Race_SpectatorBase_Name",
+            "displayName": "Spectator Base Name",
             "visibility": true,
             "description": "need more info",
             "index": -1,

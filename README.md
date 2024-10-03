@@ -14,6 +14,9 @@ Additional UI elements can be added (contact me on the Openplanet discord)
 
 ## Changelog
 
+### v3.3.0
+- add missing UI elements (Spectator Name, Medal Banner, Medal Celebration)
+
 ### v3.2.1
 - fix overlay open logic
 

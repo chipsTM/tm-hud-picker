@@ -14,6 +14,12 @@ Additional UI elements can be added (contact me on the Openplanet discord)
 
 ## Changelog
 
+### v4.0.0
+- complete overhaul and refactor for future maintainability
+
+### v3.4.0
+- add COTD UI elements (Progress, Ranking)
+
 ### v3.3.0
 - add missing UI elements (Spectator Name, Medal Banner, Medal Celebration)
 

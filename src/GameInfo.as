@@ -44,15 +44,14 @@ class GameInfo {
         auto network = Network;
         auto playground = CurrentPlayground;
         if (playground !is null && network.ClientManiaAppPlayground !is null && network.ClientManiaAppPlayground.Playground !is null) {
-            if (network.ClientManiaAppPlayground.UILayers.Length > 0 && network.ClientManiaAppPlayground.UILayers.Length == uint(uiDic["layerCount"])) {
+            if (network.ClientManiaAppPlayground.UILayers.Length > 0 && network.ClientManiaAppPlayground.UILayers.Length == layerCount) {
                 return true;
             } else {
-                uiDic["layerCount"] = network.ClientManiaAppPlayground.UILayers.Length;
+                layerCount = network.ClientManiaAppPlayground.UILayers.Length;
                 return false;
             }
         } else {
             return false;
         }
     }
-
 }

@@ -14,6 +14,9 @@ Additional UI elements can be added (contact me on the Openplanet discord)
 
 ## Changelog
 
+### v4.0.1
+- add missing IsPlaying checks
+
 ### v4.0.0
 - complete overhaul and refactor for future maintainability
 

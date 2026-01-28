@@ -41,6 +41,7 @@ class UILayerWrapper {
     }
 
     void UpdateIndex() {
+        if (!gameInfo.IsPlaying()) return;
         array<string> parts = ControlId.Split("|");
         for (uint i = 0; i < gameInfo.NetworkUILayers.Length; i++) {
             CGameManialinkPage@ Page = gameInfo.NetworkUILayers[i].LocalPage;
@@ -58,8 +59,8 @@ class UILayerWrapper {
     }
 
     void ResetVisibility() {
-        array<string> parts = ControlId.Split("|");
         if (!gameInfo.IsPlaying() || Index == IndexStatus::NotFound || Index == IndexStatus::NeedsUpdate) return;
+        array<string> parts = ControlId.Split("|");
         CGameManialinkPage@ Page = gameInfo.NetworkUILayers[Index].LocalPage;
 
         // Handle SubElements First
@@ -104,7 +105,7 @@ class UILayerWrapper {
 
     void UpdateVisibility() {
         if (!Changed) return;
-
+        if (!gameInfo.IsPlaying() || Index == IndexStatus::NotFound || Index == IndexStatus::NeedsUpdate) return;
         array<string> parts = ControlId.Split("|");
         CGameManialinkPage@ Page = gameInfo.NetworkUILayers[Index].LocalPage;
         
@@ -192,6 +193,7 @@ class ChronoUILayer : UILayerWrapper {
     }
 
     void UpdateStyles() override {
+        if (!gameInfo.IsPlaying() || Index == IndexStatus::NotFound || Index == IndexStatus::NeedsUpdate) return;
         CGameManialinkPage@ Page = gameInfo.NetworkUILayers[Index].LocalPage;
         CGameManialinkFrame@ frame = cast<CGameManialinkFrame@>(Page.GetFirstChild("frame-chrono"));
         CGameManialinkLabel@ label = cast<CGameManialinkLabel@>(Page.GetFirstChild("label-chrono"));

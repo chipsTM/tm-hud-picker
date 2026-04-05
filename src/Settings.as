@@ -7,8 +7,8 @@ bool toggleOverlay = false;
 void RenderHUDTreeSettings() {
     toggleOverlay = UI::Checkbox("Disable HUD Picker when Openplanet overlay is open", toggleOverlay);
     UI::Text("");
-    UI::TextWrapped("DISCLAIMER: You are responsible for ensuring you re-enable any hidden elements. Otherwise disabling the plugin should re-enable all elements");
-    if (gameInfo.IsPlaying()) {
+    // UI::TextWrapped("DISCLAIMER: You are responsible for ensuring you re-enable any hidden elements. Otherwise disabling the plugin should re-enable all elements");
+    // if (gameInfo.IsPlaying()) {
         if (UI::TreeNode("Race", UI::TreeNodeFlags::Framed)) {
             for (uint i = 0; i < Race.Length; i++) {
                 DrawTree(Race[i]);
@@ -27,21 +27,21 @@ void RenderHUDTreeSettings() {
             }
             UI::TreePop();
         }
-    } else {
-        UI::TextWrapped("\\$FF0You need to be in a valid playground to change these settings\\$z");
-    }
+    // } else {
+    //     UI::TextWrapped("\\$FF0You need to be in a valid playground to change these settings\\$z");
+    // }
 }
 
 void DrawTree(UILayerWrapper@ element) {
     if (UI::TreeNode(element.DisplayName + ((element.Visibility) ? " \\$0F0" + Icons::Eye + "\\$z" : " \\$F00" + Icons::EyeSlash + "\\$z") + " \\$aaa" + element.Description + "\\$z###" + element.ControlId , UI::TreeNodeFlags::Framed)) {
         string buttonText = (element.Visibility) ? "Hide" : "Show";
         if (UI::Button(buttonText)) {
-            element.Changed = true;
             element.Visibility = !element.Visibility;
+            element.Changed = true;
         }
-        if (!element.DefaultVisibility) {
+        if (!element.ServerVisibility) {
             UI::SameLine();
-            UI::Text("\\$F60Hidden by server\\$z");
+            UI::Text("\\$F60Overridden by server\\$z");
         }
 
         element.RenderStyleSettings();
@@ -79,7 +79,7 @@ void LoadState() {
     }
 }
 
-void SaveState() {  
+void SaveState() {
     auto settingsObj = Json::Object();
     for (uint i = 0; i < Categories.Length; i++) {
         for (uint j = 0; j < Categories[i].Length; j++) {

@@ -1,3 +1,27 @@
+void UpdateCategory(array<UILayerWrapper@> elements) {
+    for (uint i = 0; i < elements.Length; i++) {
+        elements[i].UpdateIndex();
+        elements[i].UpdateVisibility();
+        elements[i].UpdateStyles();
+
+        for (uint j = 0; j < elements[i].SubElements.Length; j++) {
+            elements[i].SubElements[j].UpdateIndex();
+            elements[i].SubElements[j].UpdateVisibility();
+            elements[i].SubElements[j].UpdateStyles();
+        }
+    }
+}
+
+void CEnable() {
+    for (uint i = 0; i < Categories.Length; i++) {
+        UpdateCategory(Categories[i]);
+    }
+}
+
+void OnEnabled() {
+    CEnable();
+}
+
 void ResetCategory(array<UILayerWrapper@> elements) {
     for (uint i = 0; i < elements.Length; i++) {
         elements[i].ResetVisibility();
@@ -12,45 +36,10 @@ void ResetCategory(array<UILayerWrapper@> elements) {
     }
 }
 
-void IterateCategory(array<UILayerWrapper@> elements) {
-    for (uint i = 0; i < elements.Length; i++) {
-        if (elements[i].Index == IndexStatus::NeedsUpdate) {
-            elements[i].UpdateIndex();
-        }
-        if (elements[i].Index == IndexStatus::NotFound) {
-            continue;
-        }
-
-        elements[i].UpdateVisibility();
-        elements[i].UpdateStyles();
-
-        for (uint j = 0; j < elements[i].SubElements.Length; j++) {
-            if (elements[i].SubElements[j].Index == IndexStatus::NeedsUpdate) {
-                elements[i].SubElements[j].UpdateIndex();
-            }
-            if (elements[i].SubElements[j].Index == IndexStatus::NotFound) {
-                continue;
-            }
-            elements[i].SubElements[j].UpdateVisibility();
-            elements[i].SubElements[j].UpdateStyles();
-        }
-    }
-}
-
-void CEnable() {
-    for (uint i = 0; i < Categories.Length; i++) {
-        IterateCategory(Categories[i]);
-    }
-}
-
 void CDisable() {
     for (uint i = 0; i < Categories.Length; i++) {
         ResetCategory(Categories[i]);
     }
-}
-
-void OnEnabled() {
-    CEnable();
 }
 
 void OnDisabled() {
@@ -62,6 +51,7 @@ void OnDestroyed() {
 }
 
 GameInfo@ gameInfo;
+vec2 uiBounds;
 
 void Main() {
     @gameInfo = GameInfo();
@@ -69,19 +59,31 @@ void Main() {
 
     while(true) {
         yield();
-        // wait until playground finishes loading
+
+        // determine correct uiBounds
+        // default is typically 320x180 centered
+        // -160 to 160 width and -90 to 90 height
+        float g_w = Display::GetWidth();
+        float g_h = Display::GetHeight();
+        if (g_w > g_h) {
+            uiBounds = vec2(g_w / g_h * 180, 180);
+        } else {
+            uiBounds = vec2(320, 180);
+        }
+
         while (gameInfo.LoadProgress.State == NGameLoadProgress::EState::Displayed) {
             yield();
         }
-        if (gameInfo.IsPlaying()) {
-            if (toggleOverlay) {
-                if (UI::IsOverlayShown()) {
+
+        if (gameInfo.InServer()) {
+            if (gameInfo.IsPlaying()) {
+                if (toggleOverlay && UI::IsOverlayShown()) {
                     CDisable();
                 } else {
                     CEnable();
                 }
             } else {
-                CEnable();
+                CDisable();
             }
         } else {
             CDisable();

@@ -40,18 +40,29 @@ class GameInfo {
         // set {}
     }
 
-    bool IsPlaying() {
+    bool InServer() {
         auto network = Network;
-        auto playground = CurrentPlayground;
-        if (playground !is null && network.ClientManiaAppPlayground !is null && network.ClientManiaAppPlayground.Playground !is null) {
-            if (network.ClientManiaAppPlayground.UILayers.Length > 0 && network.ClientManiaAppPlayground.UILayers.Length == layerCount) {
-                return true;
-            } else {
-                layerCount = network.ClientManiaAppPlayground.UILayers.Length;
-                return false;
-            }
+        if (network.ServerInfo !is null && cast<CTrackManiaNetworkServerInfo@>(network.ServerInfo).CurGameModeStr != "") {
+            return true;
         } else {
             return false;
         }
+    }
+
+    bool IsPlaying() {
+        auto network = Network;
+        // auto playground = CurrentPlayground;
+        // if (playground !is null && playground.UIConfigs.Length > 0 &&
+            // gameInfo.CurrentPlayground.UIConfigs[0].UISequence == CGamePlaygroundUIConfig::EUISequence::Playing) {
+        if (network.ClientManiaAppPlayground !is null && 
+            network.ClientManiaAppPlayground.Playground !is null && 
+            network.ClientManiaAppPlayground.UILayers.Length > 0) {
+            return true;
+        } else {
+            return false;
+        }
+        // } else {
+        //     return false;
+        // }
     }
 }

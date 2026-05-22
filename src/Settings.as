@@ -1,13 +1,19 @@
 bool resetSwitch = false;
+bool LocatorMode = false;
 
 [Setting hidden]
 bool toggleOverlay = false;
 
-[SettingsTab name="HUD Tree" icon="Kenney::Car"]
+[SettingsTab name="HUD Tree" icon=""]
 void RenderHUDTreeSettings() {
-    toggleOverlay = UI::Checkbox("Disable HUD Picker when Openplanet overlay is open", toggleOverlay);
+    LocatorMode = true;
+    UI::TextWrapped("\\$FF0Having this settings screen open allows you to use LOCATOR mode.");
+    UI::TextWrapped("\\$FF0Hold the Period Key (.) to show movable UI elements.\\$z");
+    UI::TextWrapped("\\$FF0Use Left mouse button to drag UI elements.\\$z");
+    UI::TextWrapped("\\$FF0Double click Right mouse button to reset the position\\$z");
     UI::Text("");
-    // UI::TextWrapped("DISCLAIMER: You are responsible for ensuring you re-enable any hidden elements. Otherwise disabling the plugin should re-enable all elements");
+    toggleOverlay = UI::Checkbox("Disable HUD Picker when Openplanet overlay is open", toggleOverlay);
+    UI::TextWrapped("DISCLAIMER: Changing the UI may result in a poorer experience. Disabling the plugin should reset all elements.");
     // if (gameInfo.IsPlaying()) {
         if (UI::TreeNode("Race", UI::TreeNodeFlags::Framed)) {
             for (uint i = 0; i < Race.Length; i++) {

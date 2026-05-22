@@ -3,6 +3,7 @@ class RecordsUILayer : UILayerWrapper {
     // these should be the defaults when plugin is disabled
     vec2 DefaultRecordsPosition = vec2(-160.0, 30.0);
     vec2 RecordsPosition = DefaultRecordsPosition;
+    vec2 RecordsSize;
 
     RecordsUILayer(const string &in controlId, const string &in displayName, const string &in description) {
         super(controlId, displayName, description);
@@ -28,6 +29,11 @@ class RecordsUILayer : UILayerWrapper {
         if (records_frame is null) return;
 
         records_frame.RelativePosition_V3 = RecordsPosition;
+
+        // CGameManialinkFrame@ sub_records_frame = cast<CGameManialinkFrame@>(records_frame.GetFirstChild("frame-records"));
+        // if (sub_records_frame is null) return;
+        RecordsSize = vec2(50, 70);
+        // RecordsSize = vec2(60, 180);
     }
 
     void RenderStyleSettings() override {
@@ -53,6 +59,24 @@ class RecordsUILayer : UILayerWrapper {
         styleSettingsObj["records_position"].Add(RecordsPosition.x);
         styleSettingsObj["records_position"].Add(RecordsPosition.y);
         return styleSettingsObj;
+    }
+
+    void Locator(vec2 oldMouse) override {
+        if (IsDotPressed) {
+            vec2 newMouse = UI::GetMousePos();
+            vec4 calcSize = MLRectToScreen(RecordsPosition, RecordsSize, HAlign::Left, VAlign::Top);
+            DrawBounds(calcSize, DisplayName);
+            if (InBounds(calcSize, newMouse)) HighlightBounds(calcSize);
+            IsDragging = GetDragState(calcSize, newMouse, IsDragging);
+            if (IsDragging && oldMouse != newMouse) {
+                RecordsPosition.x += (newMouse.x - oldMouse.x) / xScale;
+                RecordsPosition.y -= (newMouse.y - oldMouse.y) / yScale;
+                RecordsPosition = ClampBounds(RecordsPosition, RecordsSize, HAlign::Left, VAlign::Top);
+            }
+            if (InBounds(calcSize, newMouse) && UI::IsMouseDoubleClicked(UI::MouseButton::Right)) {
+                RecordsPosition = DefaultRecordsPosition;
+            }
+        }
     }
 
 }

@@ -51,7 +51,11 @@ void OnDestroyed() {
 }
 
 GameInfo@ gameInfo;
-vec2 uiBounds;
+float g_w;
+float g_h;
+vec2 uiBounds = vec2(320, 180);
+float xScale;
+float yScale;
 
 void Main() {
     @gameInfo = GameInfo();
@@ -63,13 +67,15 @@ void Main() {
         // determine correct uiBounds
         // default is typically 320x180 centered
         // -160 to 160 width and -90 to 90 height
-        float g_w = Display::GetWidth();
-        float g_h = Display::GetHeight();
+        g_w = Display::GetWidth();
+        g_h = Display::GetHeight();
         if (g_w > g_h) {
             uiBounds = vec2(g_w / g_h * 180, 180);
         } else {
             uiBounds = vec2(320, 180);
         }
+        xScale = g_w / uiBounds.x;
+        yScale = g_h / uiBounds.y;
 
         while (gameInfo.LoadProgress.State == NGameLoadProgress::EState::Displayed) {
             yield();

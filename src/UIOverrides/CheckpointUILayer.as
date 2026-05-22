@@ -3,6 +3,7 @@ class CheckpointUILayer : UILayerWrapper {
     // these should be the defaults when plugin is disabled
     vec2 DefaultCheckpointPosition = vec2(-10.0, 45.0);
     vec2 CheckpointPosition = DefaultCheckpointPosition;
+    vec2 CheckpointSize;
 
     CheckpointUILayer(const string &in controlId, const string &in displayName, const string &in description) {
         super(controlId, displayName, description);
@@ -28,6 +29,7 @@ class CheckpointUILayer : UILayerWrapper {
         if (checkpoint_frame is null) return;
 
         checkpoint_frame.RelativePosition_V3 = CheckpointPosition;
+        CheckpointSize = vec2(28, 39);
     }
 
     void RenderStyleSettings() override {
@@ -53,6 +55,26 @@ class CheckpointUILayer : UILayerWrapper {
         styleSettingsObj["checkpoint_position"].Add(CheckpointPosition.x);
         styleSettingsObj["checkpoint_position"].Add(CheckpointPosition.y);
         return styleSettingsObj;
+    }
+
+    void Locator(vec2 oldMouse) override {
+        if (IsDotPressed) {
+            vec2 newMouse = UI::GetMousePos();
+            CheckpointPosition = vec2(CheckpointPosition.x - 10, CheckpointPosition.y + 21);
+            vec4 calcSize = MLRectToScreen(CheckpointPosition, CheckpointSize, HAlign::Left, VAlign::Top);
+            DrawBounds(calcSize, "Checkpoint");
+            if (InBounds(calcSize, newMouse)) HighlightBounds(calcSize);
+            IsDragging = GetDragState(calcSize, newMouse, IsDragging);
+            if (IsDragging && oldMouse != newMouse) {
+                CheckpointPosition.x += (newMouse.x - oldMouse.x) / xScale;
+                CheckpointPosition.y -= (newMouse.y - oldMouse.y) / yScale;
+                CheckpointPosition = ClampBounds(CheckpointPosition, CheckpointSize, HAlign::Left, VAlign::Top);
+            }
+            CheckpointPosition = vec2(CheckpointPosition.x + 10, CheckpointPosition.y - 21);
+            if (InBounds(calcSize, newMouse) && UI::IsMouseDoubleClicked(UI::MouseButton::Right)) {
+                CheckpointPosition = DefaultCheckpointPosition;
+            }
+        }
     }
 
 }

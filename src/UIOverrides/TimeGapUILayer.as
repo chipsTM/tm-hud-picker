@@ -3,6 +3,7 @@ class TimeGapUILayer : UILayerWrapper {
     // these should be the defaults when plugin is disabled
     vec2 DefaultTimeGapPosition = vec2(44.0, -52.0);
     vec2 TimeGapPosition = DefaultTimeGapPosition;
+    vec2 TimeGapSize;
 
     TimeGapUILayer(const string &in controlId, const string &in displayName, const string &in description) {
         super(controlId, displayName, description);
@@ -28,6 +29,11 @@ class TimeGapUILayer : UILayerWrapper {
         if (timegap_frame is null) return;
 
         timegap_frame.RelativePosition_V3 = TimeGapPosition;
+
+        // CGameManialinkLabel@ sub_timegap_frame = cast<CGameManialinkLabel@>(timegap_frame.GetFirstChild(""));
+        // if (sub_timegap_frame is null) return;
+        // TimeGapSize = timegap_frame.Size;
+        TimeGapSize = vec2(55, 27);
     }
 
     void RenderStyleSettings() override {
@@ -53,6 +59,26 @@ class TimeGapUILayer : UILayerWrapper {
         styleSettingsObj["timegap_position"].Add(TimeGapPosition.x);
         styleSettingsObj["timegap_position"].Add(TimeGapPosition.y);
         return styleSettingsObj;
+    }
+
+    void Locator(vec2 oldMouse) override {
+        if (IsDotPressed) {
+            vec2 newMouse = UI::GetMousePos();
+            TimeGapPosition = vec2(TimeGapPosition.x + 6.5, TimeGapPosition.y - 5.5);
+            vec4 calcSize = MLRectToScreen(TimeGapPosition, TimeGapSize, HAlign::Left, VAlign::Top);
+            DrawBounds(calcSize, DisplayName);
+            if (InBounds(calcSize, newMouse)) HighlightBounds(calcSize);
+            IsDragging = GetDragState(calcSize, newMouse, IsDragging);
+            if (IsDragging && oldMouse != newMouse) {
+                TimeGapPosition.x += (newMouse.x - oldMouse.x) / xScale;
+                TimeGapPosition.y -= (newMouse.y - oldMouse.y) / yScale;
+                TimeGapPosition = ClampBounds(TimeGapPosition, TimeGapSize, HAlign::Left, VAlign::Top);
+            }
+            TimeGapPosition = vec2(TimeGapPosition.x - 6.5, TimeGapPosition.y + 5.5);
+            if (InBounds(calcSize, newMouse) && UI::IsMouseDoubleClicked(UI::MouseButton::Right)) {
+                TimeGapPosition = DefaultTimeGapPosition;
+            }
+        }
     }
 
 }

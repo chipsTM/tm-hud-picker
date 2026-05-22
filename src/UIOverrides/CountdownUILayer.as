@@ -3,6 +3,7 @@ class CountdownUILayer : UILayerWrapper {
     // these should be the defaults when plugin is disabled
     vec2 DefaultCountdownPosition = vec2(155.0, 4.0);
     vec2 CountdownPosition = DefaultCountdownPosition;
+    vec2 CountdownSize;
 
     CountdownUILayer(const string &in controlId, const string &in displayName, const string &in description) {
         super(controlId, displayName, description);
@@ -28,6 +29,11 @@ class CountdownUILayer : UILayerWrapper {
         if (countdown_frame is null) return;
 
         countdown_frame.RelativePosition_V3 = CountdownPosition;
+
+        CGameManialinkLabel@ sub_countdown_frame = cast<CGameManialinkLabel@>(countdown_frame.GetFirstChild("label-countdown"));
+        if (sub_countdown_frame is null) return;
+        CountdownSize = sub_countdown_frame.Size;
+        CountdownSize.y = 8;
     }
 
     void RenderStyleSettings() override {
@@ -53,6 +59,24 @@ class CountdownUILayer : UILayerWrapper {
         styleSettingsObj["countdown_position"].Add(CountdownPosition.x);
         styleSettingsObj["countdown_position"].Add(CountdownPosition.y);
         return styleSettingsObj;
+    }
+
+    void Locator(vec2 oldMouse) override {
+        if (IsDotPressed) {
+            vec2 newMouse = UI::GetMousePos();
+            vec4 calcSize = MLRectToScreen(CountdownPosition, CountdownSize, HAlign::Right, VAlign::Top);
+            DrawBounds(calcSize, DisplayName);
+            if (InBounds(calcSize, newMouse)) HighlightBounds(calcSize);
+            IsDragging = GetDragState(calcSize, newMouse, IsDragging);
+            if (IsDragging && oldMouse != newMouse) {
+                CountdownPosition.x += (newMouse.x - oldMouse.x) / xScale;
+                CountdownPosition.y -= (newMouse.y - oldMouse.y) / yScale;
+                CountdownPosition = ClampBounds(CountdownPosition, CountdownSize, HAlign::Right, VAlign::Top);
+            }
+            if (InBounds(calcSize, newMouse) && UI::IsMouseDoubleClicked(UI::MouseButton::Right)) {
+                CountdownPosition = DefaultCountdownPosition;
+            }
+        }
     }
 
 }

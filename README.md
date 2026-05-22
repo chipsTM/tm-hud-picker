@@ -14,6 +14,9 @@ Additional UI elements can be added (contact me on the Openplanet discord)
 
 ## Changelog
 
+### v4.2.0
+- add Locator functionality for drag and drop
+
 ### v4.1.0
 - add ability to change xy position for layers
 - fix for server UI and overlay toggle clash

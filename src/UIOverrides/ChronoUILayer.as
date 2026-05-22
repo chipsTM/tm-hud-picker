@@ -8,7 +8,7 @@ class ChronoUILayer : UILayerWrapper {
     bool ClipDigit = false;
     vec2 DefaultChronoPosition = vec2(0.0, -80.0);
     vec2 ChronoPosition = DefaultChronoPosition;
-
+    vec2 ChronoSize;
 
     ChronoUILayer(const string &in controlId, const string &in displayName, const string &in description) {
         super(controlId, displayName, description);
@@ -40,10 +40,11 @@ class ChronoUILayer : UILayerWrapper {
         CGameManialinkFrame@ chrono_frame = cast<CGameManialinkFrame@>(Page.GetFirstChild("Race_Chrono"));
         CGameManialinkFrame@ frame = cast<CGameManialinkFrame@>(Page.GetFirstChild("frame-chrono"));
         CGameManialinkLabel@ label = cast<CGameManialinkLabel@>(Page.GetFirstChild("label-chrono"));
-        if (frame is null || label is null) return;
+        if (chrono_frame is null || frame is null || label is null) return;
 
         // Position Logic
         chrono_frame.RelativePosition_V3 = ChronoPosition;
+        ChronoSize = label.Size;
 
         // Color Logic
         if (RainbowEnabled) {
@@ -132,4 +133,23 @@ class ChronoUILayer : UILayerWrapper {
         styleSettingsObj["chrono_position"].Add(ChronoPosition.y);
         return styleSettingsObj;
     }
+
+    void Locator(vec2 oldMouse) override {
+        if (IsDotPressed) {
+            vec2 newMouse = UI::GetMousePos();
+            vec4 calcSize = MLRectToScreen(ChronoPosition, ChronoSize, HAlign::Center, VAlign::Center);
+            DrawBounds(calcSize, DisplayName);
+            if (InBounds(calcSize, newMouse)) HighlightBounds(calcSize);
+            IsDragging = GetDragState(calcSize, newMouse, IsDragging);
+            if (IsDragging && oldMouse != newMouse) {
+                ChronoPosition.x += (newMouse.x - oldMouse.x) / xScale;
+                ChronoPosition.y -= (newMouse.y - oldMouse.y) / yScale;
+                ChronoPosition = ClampBounds(ChronoPosition, ChronoSize, HAlign::Center, VAlign::Center);
+            }
+            if (InBounds(calcSize, newMouse) && UI::IsMouseDoubleClicked(UI::MouseButton::Right)) {
+                ChronoPosition = DefaultChronoPosition;
+            }
+        }
+    }
+
 }

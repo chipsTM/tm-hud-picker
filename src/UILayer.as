@@ -12,6 +12,7 @@ class UILayerWrapper {
     int Index;
     bool Changed;
     array<UILayerWrapper@> SubElements;
+    bool IsDragging;
 
 
     UILayerWrapper(const string &in controlId, const string &in displayName, const string &in description) {
@@ -153,7 +154,7 @@ class UILayerWrapper {
         auto c = Page.GetFirstChild(parts[0]);
         if (c is null) return;
         if (c.ControlId != parts[0]) return;
-        if (!ServerVisibility) return;        
+        if (!ServerVisibility) return;
         if (Visibility) {
             c.Show();
         } else {
@@ -168,4 +169,5 @@ class UILayerWrapper {
     void RenderStyleSettings() {}
     void LoadStyleSettings(Json::Value@) {}
     Json::Value@ SaveStyleSettings() { auto styleSettingsObj = Json::Object(); return styleSettingsObj; }
+    void Locator(vec2 mousePos) {}
 }
